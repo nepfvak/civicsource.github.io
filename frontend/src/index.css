@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+body {
+  @apply bg-[radial-gradient(40%_60%_at_50%_0%,#ffffff,rgba(255,255,255,0.9))] text-neutral-900 font-sans;
+}
