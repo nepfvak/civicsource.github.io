@@ -14,9 +14,8 @@ import React, { useState, useEffect, useMemo } from "react";
  *  - Replace API_BASE with your Flask host if different.
  */
 
-const API_BASE =
-  (typeof window !== "undefined" && window.CIVICSOURCE_API) ||
-  "http://localhost:5000";
+const API_BASE = "http://127.0.0.1:5000";
+
 
 const cn = (...xs) => xs.filter(Boolean).join(" ");
 
@@ -201,24 +200,29 @@ function GovernmentPortal({ onNotifyVendors }) {
       setPosting(false);
     }
 
-    // Fetch matches (use /api/search). Keep it snappy for demo.
-    setLoadingMatches(true);
-    try {
-      const res = await fetch(`${API_BASE}/api/search?query=landscaping&location=${encodeURIComponent(form.location)}&radius=25&limit=12`);
-      const data = await res.json();
-      const top = (data?.businesses || [])
-        .slice(0, 6)
-        .map((b) => ({ ...b, matchScore: computeMatchScore(b, form) }))
-        .sort((a, b) => b.matchScore - a.matchScore)
-        .slice(0, 3);
-      setMatches(top);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      // 2s dramatic pause
-      await delay(800);
-      setLoadingMatches(false);
-    }
+    // Fetch live matches from your Flask backend
+setLoadingMatches(true);
+try {
+  const searchQuery = encodeURIComponent(form.title || form.category || "services");
+  const res = await fetch(
+    `${API_BASE}/api/search?query=${searchQuery}&location=${encodeURIComponent(form.location)}&radius=25&limit=12`
+  );
+  const data = await res.json();
+  console.log("Live API returned:", data);
+
+  const top = (data?.businesses || [])
+    .slice(0, 6)
+    .map((b) => ({ ...b, matchScore: computeMatchScore(b, form) }))
+    .sort((a, b) => b.matchScore - a.matchScore)
+    .slice(0, 3);
+  setMatches(top);
+} catch (e) {
+  console.error("Error fetching matches:", e);
+} finally {
+  await delay(800);
+  setLoadingMatches(false);
+}
+
   };
 
   return (

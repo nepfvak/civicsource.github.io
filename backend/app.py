@@ -1,127 +1,160 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import os
-import requests
+import os, json, requests
 from dotenv import load_dotenv
+import google.generativeai as genai
+from datetime import datetime
 
+# ------------------------------------------------------
 # Load environment variables
+# ------------------------------------------------------
 load_dotenv()
 
-# Initialize Flask
+# ------------------------------------------------------
+# Initialize Flask + CORS
+# ------------------------------------------------------
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-# === API Keys ===
+# ------------------------------------------------------
+# API Keys
+# ------------------------------------------------------
 GOOGLE_PLACES_API_KEY = os.getenv("GOOGLE_PLACES_API_KEY")
 YELP_API_KEY = os.getenv("YELP_API_KEY")
 RAPID_API_KEY = os.getenv("RAPID_API_KEY")
 
-# === API Endpoints ===
 GOOGLE_PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place"
 YELP_API_BASE = "https://api.yelp.com/v3"
 RAPID_API_HOST = "local-business-data.p.rapidapi.com"
 
+# ------------------------------------------------------
+# Gemini AI setup (optional)
+# ------------------------------------------------------
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 # ------------------------------------------------------
-# SEARCH ENDPOINT — combines Yelp, Google Places, RapidAPI
+# Helper: save results to disk
 # ------------------------------------------------------
-@app.route("/api/search")
+def save_results(data, query):
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    path = "search_results.json"
+    try:
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(
+                {"query": query, "timestamp": timestamp, "results": data},
+                f,
+                ensure_ascii=False,
+                indent=2
+            )
+        print(f"💾 Saved {len(data)} results to {path}")
+    except Exception as e:
+        print("⚠️ Could not save results:", e)
+
+# ------------------------------------------------------
+# /api/search — Live vendor search
+# ------------------------------------------------------
+@app.route("/api/search", methods=["GET"])
 def search_businesses():
-    query = request.args.get("query")
+    query = request.args.get("query", "").strip()
+    location = request.args.get("location", "Memphis, TN")
+    radius = request.args.get("radius", "25")
+    limit = int(request.args.get("limit", "12"))
+
     if not query:
         return jsonify({"error": "Query parameter is required"}), 400
 
     results = []
+    print(f"🔎 Searching live APIs for: '{query}' near {location}")
 
-    # === Yelp ===
+    # ---- Yelp API ----
     try:
-        yelp_url = f"{YELP_API_BASE}/businesses/search"
-        yelp_headers = {"Authorization": f"Bearer {YELP_API_KEY}"}
-        yelp_params = {
-            "term": query,
-            "location": "Memphis, TN",
-            "limit": 3,
-            "sort_by": "rating",
-        }
-        yelp_resp = requests.get(yelp_url, headers=yelp_headers, params=yelp_params, timeout=8)
-        if yelp_resp.status_code == 200:
-            for b in yelp_resp.json().get("businesses", []):
+        yelp_res = requests.get(
+            f"{YELP_API_BASE}/businesses/search",
+            headers={"Authorization": f"Bearer {YELP_API_KEY}"},
+            params={"term": query, "location": location, "limit": limit},
+            timeout=10
+        )
+        if yelp_res.ok:
+            yelp_data = yelp_res.json().get("businesses", [])
+            for b in yelp_data:
                 results.append({
                     "source": "Yelp",
                     "name": b["name"],
                     "rating": b.get("rating"),
-                    "address": " ".join(b["location"]["display_address"]),
-                    "phone": b.get("display_phone"),
-                    "url": b.get("url"),
+                    "reviews": b.get("review_count"),
+                    "address": " ".join(b["location"].get("display_address", [])),
+                    "website": b.get("url"),
+                    "distance_miles": round(b.get("distance", 0) / 1609.34, 1),
+                    "is_chain": "franchise" in b.get("alias", "").lower(),
+                    "government_registered": False,
                 })
         else:
-            print("Yelp API error:", yelp_resp.text)
+            print("⚠️ Yelp API error:", yelp_res.text)
     except Exception as e:
-        print("Yelp Exception:", e)
+        print("❌ Yelp fetch error:", e)
 
-    # === Google Places ===
+    # ---- RapidAPI (local-business-data) ----
     try:
-        g_url = f"{GOOGLE_PLACES_API_BASE}/textsearch/json"
-        g_params = {"query": f"{query} Memphis TN", "key": GOOGLE_PLACES_API_KEY}
-        g_resp = requests.get(g_url, params=g_params, timeout=8)
-        if g_resp.status_code == 200:
-            for g in g_resp.json().get("results", []):
-                results.append({
-                    "source": "Google Places",
-                    "name": g["name"],
-                    "rating": g.get("rating"),
-                    "address": g.get("formatted_address"),
-                    "url": f"https://www.google.com/maps/place/?q=place_id:{g['place_id']}",
-                })
-        else:
-            print("Google API error:", g_resp.text)
-    except Exception as e:
-        print("Google Exception:", e)
-
-    # === RapidAPI Local Business Data ===
-    try:
-        r_url = "https://local-business-data.p.rapidapi.com/search"
-        r_headers = {
-            "X-RapidAPI-Key": RAPID_API_KEY,
-            "X-RapidAPI-Host": RAPID_API_HOST,
-        }
-        r_params = {"query": query, "city": "Memphis", "limit": "3"}
-        r_resp = requests.get(r_url, headers=r_headers, params=r_params, timeout=8)
-        if r_resp.status_code == 200:
-            for r in r_resp.json().get("data", []):
+        rapid_res = requests.get(
+            f"https://{RAPID_API_HOST}/search",
+            headers={
+                "x-rapidapi-key": RAPID_API_KEY,
+                "x-rapidapi-host": RAPID_API_HOST
+            },
+            params={"query": query, "location": location, "limit": limit},
+            timeout=10
+        )
+        if rapid_res.ok:
+            rapid_data = rapid_res.json().get("data", [])
+            for b in rapid_data:
                 results.append({
                     "source": "RapidAPI",
-                    "name": r.get("name"),
-                    "address": r.get("address"),
-                    "url": r.get("website"),
+                    "name": b.get("name"),
+                    "rating": b.get("rating"),
+                    "reviews": b.get("review_count", 0),
+                    "address": b.get("address"),
+                    "website": b.get("website"),
+                    "is_chain": b.get("is_chain", False),
+                    "government_registered": False,
                 })
         else:
-            print("RapidAPI error:", r_resp.text)
+            print("⚠️ RapidAPI error:", rapid_res.text)
     except Exception as e:
-        print("RapidAPI Exception:", e)
+        print("❌ RapidAPI fetch error:", e)
 
-    return jsonify({"businesses": results})
+    # ---- Deduplicate and trim ----
+    seen, deduped = set(), []
+    for r in results:
+        if r["name"] not in seen:
+            deduped.append(r)
+            seen.add(r["name"])
 
-
-# ------------------------------------------------------
-# MOCK ENDPOINTS — for frontend demo flow
-# ------------------------------------------------------
-@app.route("/api/procurements", methods=["POST"])
-def create_procurement():
-    content = request.get_json()
-    print("New procurement posted:", content)
-    return jsonify({"status": "success", "message": "Procurement received"})
-
-
-@app.route("/api/proposals", methods=["POST"])
-def submit_proposal():
-    content = request.get_json()
-    print("New proposal submitted:", content)
-    return jsonify({"status": "success", "message": "Proposal received"})
-
+    print(f"✅ Found {len(deduped)} unique businesses.")
+    save_results(deduped, query)
+    return jsonify({"businesses": deduped[:limit]})
 
 # ------------------------------------------------------
-# Start the Flask server
+# Optional: Gemini chat endpoint for your helper
+# ------------------------------------------------------
+@app.route("/api/chat", methods=["POST"])
+def chat():
+    data = request.get_json()
+    message = data.get("message", "")
+    if not message:
+        return jsonify({"error": "Message required"}), 400
+
+    try:
+        model = genai.GenerativeModel("gemini-2.0-flash")
+        response = model.generate_content(
+            f"You are Civic Helper, a friendly AI that gives short bullet-point civic/business guidance with links to real resources.\nUser: {message}"
+        )
+        return jsonify({"reply": response.text})
+    except Exception as e:
+        print("Chat error:", e)
+        return jsonify({"reply": "⚠️ Something went wrong with Gemini."})
+
+# ------------------------------------------------------
+# Run Flask
 # ------------------------------------------------------
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

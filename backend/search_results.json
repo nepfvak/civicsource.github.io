@@ -1,0 +1,138 @@
+{
+  "query": "pizza",
+  "timestamp": "2025-11-08_20-32-53",
+  "results": [
+    {
+      "source": "Yelp",
+      "name": "Aldo's Pizza Pies - Downtown",
+      "rating": 3.9,
+      "reviews": 628,
+      "address": "100 S Main St Ste 101 Memphis, TN 38103",
+      "website": "https://www.yelp.com/biz/aldos-pizza-pies-downtown-memphis?adjust_creative=8hAsMqGO7Nzlkoy1IclakA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=8hAsMqGO7Nzlkoy1IclakA",
+      "distance_miles": 1.5,
+      "is_chain": false,
+      "government_registered": false
+    },
+    {
+      "source": "Yelp",
+      "name": "Rock'n Dough Pizza & Brewery",
+      "rating": 4.5,
+      "reviews": 33,
+      "address": "704 Madison Ave Memphis, TN 38103",
+      "website": "https://www.yelp.com/biz/rockn-dough-pizza-and-brewery-memphis?adjust_creative=8hAsMqGO7Nzlkoy1IclakA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=8hAsMqGO7Nzlkoy1IclakA",
+      "distance_miles": 0.8,
+      "is_chain": false,
+      "government_registered": false
+    },
+    {
+      "source": "Yelp",
+      "name": "Tamboli's Pasta & Pizza",
+      "rating": 4.1,
+      "reviews": 188,
+      "address": "1761 Madison Ave Memphis Farmers Market Memphis, TN 38104",
+      "website": "https://www.yelp.com/biz/tambolis-pasta-and-pizza-memphis?adjust_creative=8hAsMqGO7Nzlkoy1IclakA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=8hAsMqGO7Nzlkoy1IclakA",
+      "distance_miles": 1.6,
+      "is_chain": false,
+      "government_registered": false
+    },
+    {
+      "source": "Yelp",
+      "name": "East of Chicago Pizza",
+      "rating": 3.8,
+      "reviews": 84,
+      "address": "9289 Poplar Ave Ste 105 Germantown, TN 38138",
+      "website": "https://www.yelp.com/biz/east-of-chicago-pizza-germantown?adjust_creative=8hAsMqGO7Nzlkoy1IclakA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=8hAsMqGO7Nzlkoy1IclakA",
+      "distance_miles": 16.3,
+      "is_chain": false,
+      "government_registered": false
+    },
+    {
+      "source": "Yelp",
+      "name": "Fox Ridge Pizza Bar and Grill",
+      "rating": 3.8,
+      "reviews": 168,
+      "address": "711 W Brookhaven Cir Memphis, TN 38117",
+      "website": "https://www.yelp.com/biz/fox-ridge-pizza-bar-and-grill-memphis-2?adjust_creative=8hAsMqGO7Nzlkoy1IclakA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=8hAsMqGO7Nzlkoy1IclakA",
+      "distance_miles": 8.0,
+      "is_chain": false,
+      "government_registered": false
+    },
+    {
+      "source": "Yelp",
+      "name": "Memphis Pizza Cafe",
+      "rating": 3.7,
+      "reviews": 187,
+      "address": "2087 Madison Ave Memphis, TN 38104",
+      "website": "https://www.yelp.com/biz/memphis-pizza-cafe-memphis?adjust_creative=8hAsMqGO7Nzlkoy1IclakA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=8hAsMqGO7Nzlkoy1IclakA",
+      "distance_miles": 2.2,
+      "is_chain": false,
+      "government_registered": false
+    },
+    {
+      "source": "Yelp",
+      "name": "Italia Pizza Cafe",
+      "rating": 4.4,
+      "reviews": 57,
+      "address": "1306 Goodman Rd E Ste 101 Southaven, MS 38671",
+      "website": "https://www.yelp.com/biz/italia-pizza-cafe-southaven?adjust_creative=8hAsMqGO7Nzlkoy1IclakA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=8hAsMqGO7Nzlkoy1IclakA",
+      "distance_miles": 12.1,
+      "is_chain": false,
+      "government_registered": false
+    },
+    {
+      "source": "Yelp",
+      "name": "Little Italy Downtown",
+      "rating": 4.5,
+      "reviews": 43,
+      "address": "106 Ge Patterson Memphis, TN 38103",
+      "website": "https://www.yelp.com/biz/little-italy-downtown-memphis?adjust_creative=8hAsMqGO7Nzlkoy1IclakA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=8hAsMqGO7Nzlkoy1IclakA",
+      "distance_miles": 1.6,
+      "is_chain": false,
+      "government_registered": false
+    },
+    {
+      "source": "Yelp",
+      "name": "Aldo's Pizza Pies - Midtown",
+      "rating": 4.0,
+      "reviews": 281,
+      "address": "752 S Cooper St Memphis, TN 38104",
+      "website": "https://www.yelp.com/biz/aldos-pizza-pies-midtown-memphis?adjust_creative=8hAsMqGO7Nzlkoy1IclakA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=8hAsMqGO7Nzlkoy1IclakA",
+      "distance_miles": 2.3,
+      "is_chain": false,
+      "government_registered": false
+    },
+    {
+      "source": "Yelp",
+      "name": "Silly Goose",
+      "rating": 3.6,
+      "reviews": 164,
+      "address": "100 Peabody Pl Ste 190 Memphis, TN 38103",
+      "website": "https://www.yelp.com/biz/silly-goose-memphis?adjust_creative=8hAsMqGO7Nzlkoy1IclakA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=8hAsMqGO7Nzlkoy1IclakA",
+      "distance_miles": 1.5,
+      "is_chain": false,
+      "government_registered": false
+    },
+    {
+      "source": "Yelp",
+      "name": "Coletta's Italian Restaurant",
+      "rating": 3.2,
+      "reviews": 132,
+      "address": "1063 S Pkwy E Memphis, TN 38106",
+      "website": "https://www.yelp.com/biz/colettas-italian-restaurant-memphis?adjust_creative=8hAsMqGO7Nzlkoy1IclakA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=8hAsMqGO7Nzlkoy1IclakA",
+      "distance_miles": 1.5,
+      "is_chain": false,
+      "government_registered": false
+    },
+    {
+      "source": "Yelp",
+      "name": "Slice of Soul Pizza Lounge",
+      "rating": 4.3,
+      "reviews": 60,
+      "address": "1299 Madison Ave Memphis, TN 38104",
+      "website": "https://www.yelp.com/biz/slice-of-soul-pizza-lounge-memphis?adjust_creative=8hAsMqGO7Nzlkoy1IclakA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=8hAsMqGO7Nzlkoy1IclakA",
+      "distance_miles": 0.9,
+      "is_chain": false,
+      "government_registered": false
+    }
+  ]
+}
