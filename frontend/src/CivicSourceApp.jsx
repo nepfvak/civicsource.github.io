@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 /**
  * CivicSource – Clay-style Frontend (single-file React)
@@ -11,15 +11,12 @@ import React, { useMemo, useState, useEffect } from "react";
  *
  * Notes
  *  - Tailwind utility classes are assumed to be available in this environment.
- *  - shadcn/ui primitives are used lightly for consistent aesthetics.
  *  - Replace API_BASE with your Flask host if different.
  */
 
-const API_BASE = (typeof window !== 'undefined' && window.CIVICSOURCE_API) || "http://localhost:5000";
-
-// ——————————————————————————————————————————————————————————————————————————
-// Utility & Mock Helpers
-// ——————————————————————————————————————————————————————————————————————————
+const API_BASE =
+  (typeof window !== "undefined" && window.CIVICSOURCE_API) ||
+  "http://localhost:5000";
 
 const cn = (...xs) => xs.filter(Boolean).join(" ");
 
@@ -132,10 +129,9 @@ function SlidesRail() {
   return (
     <div className="grid md:grid-cols-2 gap-6">
       <Slide
-        heading="CivicSource — AI‑Powered Equity in Government Procurement"
+        heading="Smarter Procurement for a Stronger Memphis"
         lines={[
-          "Team: [Your Names] · Hackathon 2025",
-          "Hi everyone, we're [names], and we built CivicSource—an AI platform that fixes a $41 million problem in Memphis.",
+          "Every year, millions in city contracts leave local communities. CivicSource uses AI to connect Memphis government with small, local, and minority-owned businesses — keeping opportunity where it belongs: here at home.",
         ]}
       />
       <Slide
@@ -147,12 +143,22 @@ function SlidesRail() {
         ]}
       />
       <Slide
-        heading="Three‑Sided Platform"
-        lines={["Government Portal → instant AI matching","Business Portal → AI bid assistant","Public Dashboard → real-time transparency"]}
+        heading="One Platform, Three Connected Sides"
+        lines={[
+          "Government Portal → instant AI matching",
+          "Business Portal → AI bid assistant",
+          "Public Dashboard → real-time transparency",
+        ]}
       />
       <Slide
-        heading="Live Demo → Watch the Complete Flow in 60 Seconds"
-        lines={["1) Government posts need","2) AI matches vendors","3) Business gets AI help","4) Government sees full value","5) Public dashboard updates"]}
+        heading="Watch It Work — The Full Procurement Flow"
+        lines={[
+          "1) Government posts need",
+          "2) AI matches vendors",
+          "3) Business gets AI help",
+          "4) Government sees full value",
+          "5) Public dashboard updates",
+        ]}
       />
     </div>
   );
@@ -555,6 +561,8 @@ export default function CivicSourceApp() {
   const [tab, setTab] = useState("landing");
   const [notifs, setNotifs] = useState([]);
   const [lastPost, setLastPost] = useState(null);
+    const [showChat, setShowChat] = useState(false);
+
 
   const handleNotify = (match) => {
     // Create a faux notification using last posted procurement meta
@@ -582,10 +590,14 @@ export default function CivicSourceApp() {
       {/* Nav */}
       <header className="sticky top-0 z-20 backdrop-blur supports-[backdrop-filter]:bg-white/60 border-b border-black/5">
         <div className="mx-auto max-w-6xl px-4 py-4 flex items-center gap-6">
-          <div className="text-lg font-semibold tracking-tight">CivicSource</div>
+          <div className="flex items-center gap-2">
+<div className="text-lg font-semibold tracking-tight">CivicSource</div>
+
+</div>
+
           <nav className="ml-auto flex items-center gap-2">
             {[
-              ["Landing", "landing"],
+              ["Home", "landing"],
               ["Government", "government"],
               ["Business", "business"],
               ["Public Dashboard", "public"],
@@ -605,14 +617,14 @@ export default function CivicSourceApp() {
         <div className="grid md:grid-cols-2 gap-8 items-end">
           <div>
             <h1 className="text-5xl md:text-7xl leading-[0.95] tracking-tight font-semibold">
-              AI‑Powered Equity for Government Procurement
+              Empowering Memphis Through Smarter Procurement
             </h1>
             <p className="mt-6 text-neutral-700 max-w-xl">
               Three‑sided platform: <span className="font-medium">Government</span> gets instant matches, <span className="font-medium">Businesses</span> get an AI bid copilot, and the <span className="font-medium">Public</span> gets a live transparency dashboard.
             </p>
             <div className="mt-6 flex gap-3">
-              <button onClick={() => setTab("government")} className="rounded-2xl bg-neutral-900 text-white px-5 py-3">See Demo</button>
-              <button onClick={() => setTab("landing")} className="rounded-2xl border border-neutral-300 px-5 py-3">Slides</button>
+              <button onClick={() => setTab("government")} className="rounded-2xl bg-neutral-900 text-white px-5 py-3">Sign In</button>
+              <button onClick={() => setTab("landing")} className="rounded-2xl border border-neutral-300 px-5 py-3">Get Started</button>
             </div>
           </div>
           <Card>
@@ -627,7 +639,7 @@ export default function CivicSourceApp() {
               </div>
               <div className="rounded-2xl border border-neutral-200 p-4">
                 <div className="text-xs text-neutral-500">Equity</div>
-                <div className="text-lg font-semibold">12% → 47% MBE/WBE</div>
+                <div className="text-lg font-semibold">12% → 47% Local</div>
               </div>
               <div className="col-span-2">
                 <div className="text-xs text-neutral-500 mb-2">Progress to goal (60%)</div>
@@ -671,6 +683,98 @@ export default function CivicSourceApp() {
           </section>
         )}
       </main>
+{/* Floating Civic Helper Widget */}
+<div className="fixed bottom-6 right-6 z-50">
+  <button
+    onClick={() => setShowChat((s) => !s)}
+    className="bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-blue-600 hover:to-indigo-600 text-white font-semibold px-5 py-3 rounded-full shadow-lg backdrop-blur-sm border border-white/20 transition-all duration-300"
+  >
+    💬 Civic Helper
+  </button>
+
+  {showChat && (
+    <div className="mt-3 w-80 h-96 bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl p-4 flex flex-col">
+      <div className="font-semibold text-gray-800 mb-2 flex justify-between items-center">
+        <span>Civic Helper</span>
+        <button
+          onClick={() => setShowChat(false)}
+          className="text-sm text-gray-500 hover:text-gray-700"
+        >
+          ✖
+        </button>
+      </div>
+
+      <div
+        id="chatBox"
+        className="flex-grow overflow-y-auto border border-gray-200 rounded-lg p-2 text-sm text-gray-700 mb-2 space-y-2"
+      ></div>
+
+      <div id="thinking" className="hidden text-gray-500 text-sm mb-2">
+        <span className="animate-dots">Civic Helper is thinking...</span>
+      </div>
+
+      <input
+        id="chatInput"
+        type="text"
+        placeholder="Ask about civic rights, government, or legal topics..."
+        className="border border-gray-300 rounded-lg px-2 py-1 text-sm"
+        onKeyDown={async (e) => {
+          if (e.key === "Enter" && e.target.value.trim()) {
+            const msg = e.target.value.trim();
+            const chatBox = document.getElementById("chatBox");
+            const thinking = document.getElementById("thinking");
+            chatBox.innerHTML += `<p><b>You:</b> ${msg}</p>`;
+            e.target.value = "";
+            thinking.classList.remove("hidden");
+
+            try {
+              const res = await fetch("http://localhost:5000/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: msg }),
+              });
+              const data = await res.json();
+              thinking.classList.add("hidden");
+
+              // Typing animation + Markdown-style formatting
+const aiText = data.reply;
+
+// Convert basic Markdown formatting first
+const formattedText = aiText
+  .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")                 // Bold **text**
+  .replace(/^- (.*$)/gm, "• $1")                          // Bullet list
+  .replace(/\n/g, "<br>")                                 // Newlines
+  .replace(
+    /(https?:\/\/[^\s]+)/g,
+    '<a href="$1" target="_blank" class="text-blue-600 underline">$1</a>'
+  );
+
+const aiParagraph = document.createElement("p");
+aiParagraph.innerHTML = "<b>Civic Helper:</b> ";
+chatBox.appendChild(aiParagraph);
+
+let i = 0;
+const typeInterval = setInterval(() => {
+  aiParagraph.innerHTML = `<b>Civic Helper:</b> ${formattedText
+    .slice(0, i)}<span class='animate-pulse'>|</span>`;
+  chatBox.scrollTop = chatBox.scrollHeight;
+  i++;
+  if (i > formattedText.length) clearInterval(typeInterval);
+}, 25);
+
+            } catch (err) {
+              console.error(err);
+              thinking.classList.add("hidden");
+              chatBox.innerHTML += `<p><b>Civic Helper:</b> Sorry, I couldn't fetch a reply.</p>`;
+            }
+          }
+        }}
+      />
+    </div>
+  )}
+</div>
+
+
 
       {/* Footer */}
       <footer className="border-t border-black/5 py-10">

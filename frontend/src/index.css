@@ -3,3 +3,24 @@
 body {
   @apply bg-[radial-gradient(40%_60%_at_50%_0%,#ffffff,rgba(255,255,255,0.9))] text-neutral-900 font-sans;
 }
+/* ————————————————
+   Civic Helper Animation
+   ———————————————— */
+@keyframes dots {
+  0%, 20% { content: "." }
+  40% { content: ".." }
+  60%, 100% { content: "..." }
+}
+.animate-dots::after {
+  display: inline-block;
+  animation: dots 1.5s infinite steps(1,end);
+  content: "";
+}
+
+.animate-pulse {
+  animation: pulse 1s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
